@@ -6,6 +6,12 @@ class Journal:
     def __init__(self):
         self.entries = []#time ordered list of entries
         self.tagdict = {}#dict of tag instance lists, using tag name as keyword
+        
+    def isentrytimeunique(self,time):
+        for entry in self.entries:
+            if entry.time==time:
+                return False
+        return True
 
 class Entry:
     def parse(self):
@@ -26,8 +32,9 @@ class Entry:
         
         if len(self.tags)>0:
             if (self.tags[0].name=="Entry"):
-                if len(self.tags[0].field)>1:
+                if self.tags[0].field.isdigit():
                     self.validentry=True
+                    self.time=int(self.tags[0].field)
         
 class Tag:
     def __init__(self,name,field,parententry):
