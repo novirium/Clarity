@@ -32,6 +32,7 @@ class Task:
 
 jrnl = journal.Journal()
 tasklist= {}
+completetasks=[]
 
 def gentasklist():
     if 'task' in jrnl.tagdict:
@@ -44,7 +45,7 @@ def gentasklist():
     else:
         completetasktags=[]
 
-    completetasks=[]
+    completetasks[:]=[]
     for completetasktag in completetasktags:
         completetasks.append(completetasktag.field)
 
@@ -61,15 +62,16 @@ def gentasklist():
         tdntags=[]
 
     for tdntag in tdntags:
-        if tdntag.field in tasklist:
-            tasklist[tdntag.field].todonext=tdntag.getnextsentence()
-        else:
-            print ("Couldn't find task "+tdntag.field)
+        if not (tdntag.field in completetasks):
+            if tdntag.field in tasklist:
+                tasklist[tdntag.field].todonext=tdntag.getnextsentence()
+            else:
+                print ("Couldn't find task "+tdntag.field)
 
 def getfreetaskref(weeknumber):
     letterindex=0
     newtaskref=str(weeknumber)+"A"
-    while (newtaskref in tasklist) and (letterindex<701):
+    while ((newtaskref in tasklist) or (newtaskref in completetasks)) and (letterindex<701):
         letterindex+=1
         newtaskref=str(weeknumber)
         if (letterindex>=26):
